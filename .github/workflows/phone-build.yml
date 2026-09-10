@@ -22,6 +22,8 @@ jobs:
       - name: Unpack Metrolist source
         run: |
           mkdir source
+          cat metrolist-source.zip.part-* > metrolist-source.zip
+          unzip -tq metrolist-source.zip
           unzip -q metrolist-source.zip -d source
 
       - name: Set up Java 21
