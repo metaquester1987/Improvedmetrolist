@@ -8,7 +8,7 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -69,3 +69,14 @@ jobs:
           name: metrolist-foss-debug
           path: source/app/build/outputs/apk/**/*.apk
           if-no-files-found: error
+
+      - name: Publish stable preview download
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          apk_path="$(find source/app/build/outputs/apk -type f -name '*.apk' -print -quit)"
+          test -n "$apk_path"
+          cp "$apk_path" Metrolist-Improved-Wrapped-Preview.apk
+          gh release upload wrapped-preview-2026-09-28 Metrolist-Improved-Wrapped-Preview.apk \
+            --repo "${{ github.repository }}" \
+            --clobber
